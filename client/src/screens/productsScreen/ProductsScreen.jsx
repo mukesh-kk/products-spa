@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   MDBCard,
   MDBCardImage,
@@ -19,13 +20,12 @@ import { useNavigate } from "react-router";
 import { OrderApi, ProductApi } from "../../services/apis";
 import { toast } from "react-toastify";
 import "./ProductsScreen.css";
-import api from "../../utils/axios.config";
 export default function ProductsScreen(props) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    api({
+    axios({
       url: ProductApi.GET_PRODUCTS,
       method: "get",
     })
@@ -38,7 +38,7 @@ export default function ProductsScreen(props) {
       });
   }, []);
   async function createOrder(prod) {
-    api({
+    axios({
       url: OrderApi.POST_ORDER,
       method: "post",
       data: {

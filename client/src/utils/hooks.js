@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-
 const useSessionStorage = (key, initialValue) => {
     // Retrieve the initial value from session storage or use the provided initial value
     const [value, setValue] = useState(() => {
