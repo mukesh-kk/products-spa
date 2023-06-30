@@ -7,8 +7,6 @@ import useSessionStorage from "./utils/hooks";
 import ProductsScreen from "./screens/productsScreen/ProductsScreen";
 function App() {
   const [user, setUser] = useSessionStorage("user", {});
-
-  console.log(user);
   return (
     <>
       <BrowserRouter>

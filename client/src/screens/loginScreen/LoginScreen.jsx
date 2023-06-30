@@ -9,13 +9,13 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import PropTypes from "prop-types";
-import axios from "axios";
 import loginIcon from "../../assets/login.svg";
 import "./LoginScreen.css";
 import { UserApi } from "../../services/apis";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import api from "../../utils/axios.config";
 function LoginScreen(props) {
   const navigate = useNavigate();
   const [login, setLogin] = useState(true);
@@ -25,25 +25,27 @@ function LoginScreen(props) {
     const password = e.target.password.value;
     const name = e.target.name.value;
 
-    const res = await axios({
-      method: "post",
-      url: login ? UserApi.LOGIN_USER : UserApi.CREATE_USER,
-      data: {
-        email,
-        password,
-        ...(!login
-          ? {
-              name,
-            }
-          : {}),
-      },
-    });
-    if (res.data.user) {
-      props.setUser(res.data.user);
-      sessionStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/products");
-    } else {
-      toast.error("Wrong Credentials");
+    try {
+      const res = await api({
+        method: "post",
+        url: login ? UserApi.LOGIN_USER : UserApi.CREATE_USER,
+        data: {
+          email,
+          password,
+          ...(!login
+            ? {
+                name,
+              }
+            : {}),
+        },
+      });
+      if (res.data.user) {
+        props.setUser(res.data.user);
+        sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        navigate("/products");
+      }
+    } catch (err) {
+      toast.error(err.response.data);
     }
   }
 

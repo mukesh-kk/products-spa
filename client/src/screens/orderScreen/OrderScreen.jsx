@@ -21,12 +21,13 @@ import {
 import "./OrderScreen.css";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import { OrderApi } from "../../services/apis";
 import { toast } from "react-toastify";
 import { Rating } from "react-simple-star-rating";
 import { useNavigate } from "react-router";
 import empty from "../../assets/empty.svg";
+import api from "../../utils/axios.config";
 function OrderScreen(props) {
   const [orders, setOrders] = useState([]);
   const [show, setShow] = useState(false);
@@ -34,7 +35,7 @@ function OrderScreen(props) {
   const navigate = useNavigate();
   const [selectedOrder, setSelectedOrder] = useState();
   useEffect(() => {
-    axios({
+    api({
       method: "get",
       url: OrderApi.GET_ORDER,
       params: { userId: props.user?._id },
@@ -49,7 +50,7 @@ function OrderScreen(props) {
       });
   }, [deleted]);
   function updateOrderFeedback(order) {
-    axios({
+    api({
       method: "patch",
       url: OrderApi.UPDATE_ORDER + "/" + order._id,
       data: { stars: order.stars || 0, feedback: order.feedback || "" },
@@ -58,7 +59,7 @@ function OrderScreen(props) {
     });
   }
   const orderDelete = (ord) => {
-    axios
+    api
       .delete(OrderApi.DELETE_ORDER + "/" + ord._id)
       .then(() => {
         toast.success("Deleted");
